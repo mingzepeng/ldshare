@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>pqframe</title>
+        <?php
+        Page::importCommonCSS('reset,common');
+        Page::import('semantic/css/semantic.min.css');
+        Page::importCSS('style');
+        ?>
+
+    </head>
+
+    <body>
+        <div class="header ui fixed transparent red inverted main menu">
+            <div class="container">
+                <a class="blue item">李丹的小书柜</a>
+ 
+ <div class="right menu">
+    <a href="#" class="item">注销</a>
+    <a class="item">帮助</a>
+  </div>
+            </div>
+        </div>
+        <div class="main container">
+            <div class="ui grid">
+              <div class="five wide column">
+              <div class="ui vertical red menu">
+
+  <div class="item">
+    <i class="home icon"></i> 主页
+
+  </div>
+  <a class="item active">
+    <i class="grid layout icon"></i> 文档管理
+  </a>
+  <a class="item">
+    <i class="mail icon"></i> 文档类别管理
+  </a>
+
+</div>
+              </div>
+
+              <div class="eleven wide column">
+                <form>
+              <div class="ui form segment">
+      <div class="field">
+        <label>名称</label>
+        <div class="ui left labeled icon input">
+          <input type="text" placeholder="名称" name="name">
+          <i class="user icon"></i>
+          <div class="ui corner label">
+            <i class="asterisk icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>类别</label>
+<div class="ui selection dropdown">
+  <input type="hidden" name="type">
+  <div class="text">小说</div>
+  <i class="dropdown icon"></i>
+  <div class="menu">
+    <div class="item" data-value="1">小说</div>
+    <div class="item active" data-value="0">文学</div>
+  </div>
+</div>
+      </div>
+        <div class="field">
+    <label>描述</label>
+    <textarea></textarea>
+  </div>
+
+  <div class="field">
+<div class="ui checkbox">
+  <input type="checkbox" name="published" checked="checked">
+  <label>是否发布</label>
+</div>
+  </div>
+      <div class="field">
+        <label>小说上传</label>
+        <div class="ui left labeled icon input">
+          <input type="file" placeholder="文件上传" name="file">
+          <i class="user icon"></i>
+          <div class="ui corner label">
+            <i class="asterisk icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="ui blue submit button">提交</div>
+    </div></form>
+
+              </div>
+
+
+            </div>
+        </div>
+    </body>
+</html>
+    <?php
+        Page::importCommonJS('jquery');
+        Page::import('semantic/javascript/semantic.min.js');
+        Page::importJS('main');
+    ?>
