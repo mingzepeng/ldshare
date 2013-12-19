@@ -38,21 +38,21 @@ return array(
 	'DB' => array(
 		'MAIN'=> array(
 			
-			'DB_TYPE'=>'mysql',
+			'type'=>'mysql',
 
-			'DB_HOST'=>'localhost',
+			'host'=>'localhost',
 
-			'DB_USER'=>'root',
+			'user'=>'root',
 
-			'DB_PASSWORD'=>'',
+			'password'=>'123456',
 
-			'DB_CHARSET'=>'utf8',
+			'charset'=>'utf8',
 
-			'DB_NAME'=>'pqframe',
+			'db_name'=>'ldshare',
 
-			'DB_TABLE_PRE'=>'jh_',
+			'table_pre'=>'jh_',
 
-			'PCONNECT'=>0,
+			'pconnect'=>0,
 		)
 	)
 );

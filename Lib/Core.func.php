@@ -61,7 +61,7 @@ function M($model=null,$type=null)
 	{
 		if(!isset($models[$model]))
 		{
-			$modelfile = ROOT.'/'.MODEL_DIR.'/'.$model.'Model.php';
+			$modelfile = ROOT.'/'.Config::get('MODEL_DIR').'/'.$model.'Model.php';
 			if(is_file($modelfile))
 			{
 				include_once($modelfile);
@@ -77,20 +77,21 @@ function M($model=null,$type=null)
 	}
 }
 
-function U($app='',$action='',$param = array(),$enter='index')
+function U($app=null,$action=null,$param = array(),$enter=null)
 {
-	$url = '';
-	$params = '';
-	($app === '')    && $app = 'index';
-    ($action === '') && $action = 'index';
-	$app = 'app='.$app;
-	$action = 'action='.$action;
-	if (is_array($param))
+	$params = array();
+	if($app === null) $app = Controller;
+    if($action === null) $action = 'index';
+	if (!empty($param))
+		foreach ($param as $key=>$value)  $params[] = $key.'='.$value;
+	if($enter === null) 
 	{
-		foreach ($param as $key=>$value)  $params.= '&'.$key.'='.$value;
+		$enter = '';
+		if(defined('ENTER')) $enter = ENTER + '.php';
 	}
-	$enter .= '.php?';
-	$url = $enter.$app.'&'.$action.$params;
+	else if(isset($enter[0]))
+		$enter .= '.php';
+	$url = $enter.'?c='.$app.'&a='.$action.'&'.implode('&',$params);
 	return $url;
 }
 

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>pqframe</title>
+        <?php
+        Page::importCommonCSS('reset,common');
+        Page::import('semantic/css/semantic.min.css');
+        Page::importCSS('style');
+        ?>
+
+    </head>
+
+    <body>
+        <div class="header ui fixed transparent red inverted main menu">
+            <div class="container">
+                <a class="blue item">小书柜</a>
+ 
+ <div class="right menu">
+    <a href="#" class="item">注销</a>
+    <a class="item">帮助</a>
+  </div>
+            </div>
+        </div>
+        <div class="main container">
+            <div class="ui grid">
+              <div class="five wide column">
+              <div class="ui vertical red menu">
+
+  <div class="item">
+    <i class="home icon"></i> 主页
+
+  </div>
+  <a class="item active">
+    <i class="grid layout icon"></i> 文档管理
+  </a>
+  <a class="item">
+    <i class="mail icon"></i> 文档类别管理
+  </a>
+
+</div>
+              </div>
+
+              <div class="eleven wide column">
+      
+
+               <table class="ui table segment ">
+  <thead>
+    <tr><th>名称</th>
+   
+     <th width="30%">操作</th>
+  </tr></thead>
+  <tbody>
+    <?php foreach ($data as $key => $value) {?>
+    <tr>
+      <td><?php echo $value['name'];?></td>
+      <td><div class="ui compact menu">
+  <a class="item" href="<?php url('docType','edit',array('id'=>$value['id']),'admin');?>">编辑
+    <i class="edit icon"></i>
+  </a>
+  <a class="item" href="<?php url('docType','delete',array('id'=>$value['id']),'admin');?>">删除<i class="delete icon"></i></a>
+</div>
+</td>
+    </tr>
+    <?php } ?>
+
+  </tbody>
+
+</table>
+                <div class="ui icon menu">
+  <a class=" item" href="<?php url('docType','add',null,'admin');?>">
+    <i class="add icon"></i>发布
+  </a>
+
+
+</div>
+
+
+              </div>
+
+
+            </div>
+        </div>
+    </body>
+</html>
+    <?php
+        Page::importCommonJS('jquery');
+        Page::import('semantic/javascript/semantic.min.js');
+        Page::importJS('main');
+    ?>

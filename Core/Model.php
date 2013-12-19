@@ -13,9 +13,11 @@ class Model extends Core
 	public $dbstuff = null;
 
 	//数据库表前缀
-	public $tablepre = '';
+	public $table_pre = '';
 	//数据库表
-	public $table = '';
+	public $table_name = '';
+	//数据库全名
+	public $table_full_name = '';
 	//表主键
 	public $pk = null;
 	//表字段
@@ -48,10 +50,11 @@ class Model extends Core
 	 */ 
 	public function __construct($table='')
 	{
-		$this->dbstuff = dbmysql::getInstance(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME,DB_CHARSET,PCONNECT);
+		import('Db/mysql');
+		$db = Config::get('DB');
+		$this->dbstuff = mysql::getInstance($db['MAIN']);
 		$this->dbstuff->connect();
-		if(defined('DB_TABLE_PRE')) $this->tablepre = DB_TABLE_PRE;
-		$this->setTable($table);
+		$this->setTable($table,$db['MAIN']['table_pre']);
 	}
 	
 	public function __destruct()
@@ -70,16 +73,22 @@ class Model extends Core
 		return $this->get($var); 
 	}
 	
-	public function setTable($table='')
+	public function setTable($table='',$tablepre='')
 	{
-	    if ($table === '') return false;
-	    $this->table = $this->tablepre.$table;
+	    if ($table !== '') $this->table_name = $table;
+	    $this->table_pre = $tablepre;
+	    $this->table_full_name = $this->table_pre.$this->table_name;
 	    return $this;
 	}
 	
 	public function create($data=array())
 	{
 		$this->data = empty($data) ? $_POST : $data;
+		if(!empty($this->fields))
+		{
+			foreach ($this->data as $key => $value) 
+				if(!in_array($key, $this->fields)) unset($this->data[$key]);
+		}
 		$this->auto_input_filter && $this->inputFilter();
 		$this->autocheck && $this->_validate();	
 		return $this;
@@ -100,7 +109,7 @@ class Model extends Core
     
 	public function find($pk=array())
 	{
-		if( '' === ($table = $this->table) ) return false;
+		$table = $this->table_full_name;
 		$field = (isset($this->option['field']) && !empty($this->option['field'])) ? implode(',',$this->option['field']) : '*';
 		$join = '';
 		$where = '';
@@ -112,7 +121,7 @@ class Model extends Core
 			{
 				if (!empty($this->option['join']['field'])) $field.=','.implode($this->option['join']['field']);
 			}
-			$join = ' '.$this->option['join']['type'].' join '.$this->option['join']['table'].' on '.$this->table.'.'.$this->option['join']['matchfield'][0].'='.$this->option['join']['table'].'.'.$this->option['join']['matchfield'][1].' ';
+			$join = ' '.$this->option['join']['type'].' join '.$this->option['join']['table'].' on '.$table.'.'.$this->option['join']['matchfield'][0].'='.$this->option['join']['table'].'.'.$this->option['join']['matchfield'][1].' ';
 		}
 
 		if (!empty($this->option['condition']))
@@ -157,7 +166,7 @@ class Model extends Core
 	
 	public function findone($pk=null)
 	{
-		if( '' === ($table = $this->table) ) return false;
+		$table = $this->table_full_name;
 		$field = (isset($this->option['field']) && !empty($this->option['field'])) ? implode(',',$this->option['field']) : '*' ;
 		$join = '';
 		$condition  = '';
@@ -169,7 +178,7 @@ class Model extends Core
 			{
 				if (!empty($this->option['join']['field'])) $field.=','.implode($this->option['join']['field']);
 			}
-			$join = ' '.$this->option['join']['type'].' join '.$this->option['join']['table'].' on '.$this->table.'.'.$this->option['join']['matchfield'][0].'='.$this->option['join']['table'].'.'.$this->option['join']['matchfield'][1].' ';
+			$join = ' '.$this->option['join']['type'].' join '.$this->option['join']['table'].' on '.$table.'.'.$this->option['join']['matchfield'][0].'='.$this->option['join']['table'].'.'.$this->option['join']['matchfield'][1].' ';
 		}
 		$order = (isset($this->option['order']) && !empty($this->option['order']))?  ' order by '.$this->option['order'] : '';
 		$limit =  ' limit 1';
@@ -196,9 +205,9 @@ class Model extends Core
 		return $result;
 	}
 	
-	public function save($pk=null)
+	public function update($pk=null)
 	{
-		if( '' === ($table = $this->table) ) return false;
+		$table = $this->table_full_name;
 		$condition = '';
 		$condition2 = '';
 		$where = '';
@@ -242,13 +251,14 @@ class Model extends Core
 		$kv = substr($kv,0,-1);
 		$sql ="update {$table} set {$kv} {$where}";
 		$result = $this->dbstuff->query($sql);
+		if($result === true) $result = $this->getAffectedRows();
 		$this->clear();
 		return $result;
 	}
 	 
 	public function delete($pk=null)
 	{
-		if( '' === ($table = $this->table) ) return false;
+		$table = $this->table_full_name;
 		$condition = '';
 		$condition2 = '';
 		$where = '';
@@ -289,17 +299,19 @@ class Model extends Core
 
 		$sql = "delete from {$table} {$where}";
 		$result = $this->dbstuff->query($sql);
+		if($result === true) $result = $this->getAffectedRows();
 		$this->clear();
 		return $result;
 	}
 	
-	public function add()
+	public function insert()
 	{
-		if( '' === ($table = $this->table) ) return false;
+		$table = $this->table_full_name;
 		$fields = implode(',',array_keys($this->data));
 		$values = "'".implode("','",array_values($this->data))."'";
 		$sql = "insert into {$table} ($fields) values($values)";
 		$result = $this->dbstuff->query($sql);
+		if($result === true) $result = $this->getAffectedRows();
 		$this->clear();
 		return $result;
 	}
@@ -366,9 +378,8 @@ class Model extends Core
 						if(!preg_match($reg,$value))  $this->$callback($rule[3]);
 						break;
 	            	case 'unique':
-	            		if ($this->table === '') $this->$errorback('data table unavailable');
-	            		$table = $this->tablepre.$this->table;
-						$sql = "select {$field} from {$table} where {$field}='{$value}' ";
+	            		if ($this->table_full_name === '') $this->$errorback('data table unavailable');
+						$sql = "select {$field} from {$this->table_full_name} where {$field}='{$value}' ";
 	            		$result = $this->dbstuff->num_rows($sql);
 	            		if($result > 0) $this->$callback($rule[3]);
 	            		break;
@@ -427,11 +438,14 @@ class Model extends Core
 		if ($var == null) return false;
 		if (is_array($var))
 		{
-			foreach ($var as $key=>$value1) $this->data[$key] = $value1;
+			$this->data = array_merge($this->data,$var);
 		}
 		else 
 		{
-			$this->data[$var] = $value;
+			if($value === null) 
+				unset($this->data[$var]);
+			else
+				$this->data[$var] = $value;
 		}
 		return $this;
 	}
@@ -446,13 +460,11 @@ class Model extends Core
 	
 	public function select($fields)
 	{
-		if (is_string($fields) && $fields !== '') $fields = explode(',',$fields);
-		if (is_array($fields) && !empty($fields) ) 
-		{
-			if (isset($this->table)) 
-			    foreach ($fields as $key=>$field) $fields[$key] = $this->tablepre.$this->table.'.'.$field;
-			$this->option['field'] = $fields;
-		}
+		if(!isset($this->option['field'])) $this->option['field'] = array();
+		if (is_string($fields) && $fields !== '') 
+			$this->option['field'] = array_merge($this->option['field'],explode(',',$fields));
+		else
+			$this->option['field'] = array_merge($this->option['field'],$fields);
 		return $this;
 	}
 	
@@ -486,7 +498,7 @@ class Model extends Core
 	
 	public function join($jontable,$matchfield,$joinfields,$type='inner')
 	{
-		$this->option['join']['table'] = $this->tablepre.$jontable;
+		$this->option['join']['table'] = $this->table_pre.$jontable;
 		if(is_array($matchfield)) 
 		{
 			$this->option['join']['matchfield'] = array_values($matchfield);
@@ -507,18 +519,19 @@ class Model extends Core
 		$this->option['join']['type'] = 'inner';
 		return $this;
 	}
+
 	
-	public function insert_id()
+	public function getInsertId()
 	{
 		return $this->dbstuff->insert_id();
 	}
 	
-	public function num_rows($sql)
+	public function getNumRows($sql)
 	{
 		return $this->dbstuff->num_rows($sql);
 	}
 	
-	public function affected_rows()
+	public function getAffectedRows()
 	{
 		return $this->dbstuff->affected_rows();
 	}

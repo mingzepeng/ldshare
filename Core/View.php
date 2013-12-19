@@ -49,7 +49,7 @@ class View extends Core
         $this->setModule($module);
     }
     
-	public function assign($key,$value=null)
+	public function assign($var,$value=null)
 	{
 		if (!is_array($var))
 			$this->data[$var] = $value;
@@ -118,8 +118,9 @@ class View extends Core
 				//var_dump($log_data);
 				$log_data = urldecode(json_encode($log_data));
 				//var_dump(Controller::$log_data);
-				//$log_file = ROOT.'/Lib/log.inc.php';
-				import("log","inc");
+				$log_file = ROOT.'/Lib/log.inc.php';
+				include($log_file);
+				//import("log","inc");
 			}
     		return true;
     	}

@@ -1,7 +1,9 @@
 <?php
-abstract class Controller extends Core
+class Controller extends Core
 {	
 	public static $view = null;
+
+	public static $log_data = array();
 	
 	public function display($file='',$type='put')
 	{
@@ -28,8 +30,13 @@ abstract class Controller extends Core
 		if (self::$view instanceof View) self::$view->setModule($module);
 	}
 	
-	public function directTo($controller='index',$action='index',$params=array(),$enter='index')
+	public function to($controller=null,$action='index',$params=array(),$enter=null)
 	{
+		if($controller === null)
+		{
+			$called_class = get_called_class();
+			$controller = substr($called_class, 0 ,strrpos($called_class, "Controller")) ;
+		} 
 		$url = U($controller,$action,$params,$enter);
 		header("Location:{$url}");
 	}

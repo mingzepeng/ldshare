@@ -7,7 +7,7 @@
 			修改数据
 			插入数据
 */
-class dbmysql
+class mysql
 {
     private $link;
     private $db_host;   
@@ -21,19 +21,19 @@ class dbmysql
     static  $sqls = array();
     static  $sqllog = array();
   
-    private function __construct($host,$user,$password,$dbname,$charset='utf8',$pconnect=0)
+    private function __construct($config)
     {
-        $this->db_host = $host;
-      	$this->db_user = $user;
-      	$this->db_passwd = $password;
-      	$this->db_name = $dbname;
-      	$this->db_charset = $charset;
-      	$this->pconnect = $pconnect;
+        $this->db_host = $config['host'];
+      	$this->db_user = $config['user'];
+      	$this->db_passwd = $config['password'];
+      	$this->db_name = $config['db_name'];
+      	$this->db_charset = $config['charset'];
+      	$this->pconnect = $config['pconnect'];
     }
   
-    static function getInstance($host,$user,$password,$dbname,$charset='utf8',$pconnect=0)
+    static function getInstance($config)
     {
-        if(self::$Instance == null) self::$Instance = new dbmysql($host,$user,$password,$dbname,$charset,$pconnect);
+        if(self::$Instance == null) self::$Instance = new mysql($config);
         return self::$Instance; 
     }
   
