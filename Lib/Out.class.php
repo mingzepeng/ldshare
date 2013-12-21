@@ -22,33 +22,33 @@ class Out
 			self::$log_data[$var] = $value;
 	}
 
-	public static function ajaxSuccess($info,$data=null)
+	public static function ajaxSuccess($info,$data=array())
 	{
 	    self::ajaxOut(self::succes,$info,$data);
 	}
 	
-	public static function ajaxFail($info,$data=null)
+	public static function ajaxFail($info,$data=array())
 	{
 		self::ajaxOut(self::fail,$info,$data);
 		exit;
 	}
 
-	public static function ajaxWarn($info,$data=null)
+	public static function ajaxWarn($info,$data=array())
 	{
 	    self::ajaxOut(self::warn,$info,$data);
 	}
 	
-	public static function ajaxError($info,$data=null)
+	public static function ajaxError($info,$data=array())
 	{
 		self::ajaxOut(self::error,$info,$data);
 		exit;
 	}
 
-	public static function ajaxOut($state,$info,$data=null)
+	public static function ajaxOut($state,$info,$data=array())
 	{
 		//$info = urlencode($info);
 		$out = array('state'=>$state , 'info'=>$info);
-		if($data !== null) $out['data'] = $data;
+		if(!empty($data)) $out['data'] = $data;
 		if(!empty(self::$log_data)) $out['log'] = self::$log_data;
 		$out = array_map('urlencode_deep', $out);
 		header("Content-type: text/html; charset=utf-8");

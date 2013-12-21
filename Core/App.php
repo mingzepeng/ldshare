@@ -14,6 +14,7 @@ class App extends Core
 		import('Security','func');
 		import('Out');
 		// todo  need a secure function to filter gpc
+		@set_magic_quotes_runtime(0);
 		if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc())
 		{
 			$_POST   = stripslashes_deep($_POST);

@@ -43,12 +43,12 @@
               </div>
 
               <div class="eleven wide column">
-                <form class="ui form segment" action="<?php url('doc','insert');?>" method="POST">
-              
+                <form class="ui form segment" action="<?php url('doc','update');?>" method="POST">
+              <input type="hidden"  name="id" value="<?php echo $data['id'];?>">
       <div class="field">
         <label>名称</label>
         <div class="ui left labeled icon input">
-          <input type="text" placeholder="名称" name="name">
+          <input type="text" placeholder="名称" name="name" value="<?php echo $data['name'];?>">
           <i class="user icon"></i>
           <div class="ui corner label">
             <i class="asterisk icon"></i>
@@ -59,36 +59,45 @@
       <div class="field">
         <label>类别</label>
 <div class="ui selection dropdown">
-  <input type="hidden" name="type_id" value="<?php echo $type_list[0]['id'];?>" >
-  <div class="text"><?php echo $type_list[0]['name'];?></div>
+  <input type="hidden" name="type_id" value="<?php echo $data['type_id'];?>" >
+  <div class="text"><?php echo $types[$data['type_id']];?></div>
   <i class="dropdown icon"></i>
   <div class="menu">
-      <?php foreach ($type_list as $key => $value) { ?>
-    <div class="item" data-value="<?php echo $value['id'];?>"><?php echo $value['name'];?></div>
+      <?php foreach ($types as $key => $value) { ?>
+    <div class="item" data-value="<?php echo $key;?>"><?php echo $value;?></div>
       <?php } ?>
+	 
   </div>
 </div>
       </div>
         <div class="field">
     <label>描述</label>
-    <textarea></textarea>
+    <textarea><?php echo $data['description'];?></textarea>
   </div>
 
   <div class="field">
 <div class="ui checkbox">
-  <input type="checkbox" name="published" checked="checked" value="1">
+  <input type="checkbox" name="published" <?php if($data['published'] == '1') echo 'checked';?> value="1">
   <label>是否发布</label>
 </div>
   </div>
 
-
   <div class="field">
-    <label>文件列表</label>
+<label>文件列表</label>
     <div class="ui list segment" id="file_list">
- 
-
+      <?php foreach ($attachs as $key => $value) { ?>
+      <div class="item">
+        <input type="hidden" name="files[]" value=" <?php echo $value['id'];?>" />
+        <i class="delete link icon"></i>
+        <a class="header" href="<?php echo $value['url'];?>">
+          
+          <?php echo $value['name'];?>
+        </a>
+      </div>
+      <?php } ?>
     </div>
   </div>
+
 
         <div class="field">
         <label>文件上传</label>
@@ -100,10 +109,8 @@
           </div>
         </div>
       </div>
-      
-       
 
-      <div class="ui blue submit button">保存</div>
+      <div class="ui blue submit button">提交</div>
     </form>
 
               </div>
@@ -119,14 +126,13 @@
         Page::import('uploadify/jquery.uploadify.min.js');
         Page::importJS('main');
     ?>
-    <script type="text/javascript">
+        <script type="text/javascript">
  
             $("#file").uploadify({
                 'swf': '<?php Page::$config['common_dir'];?>/uploadify/uploadify.swf',
                 'uploader': '<?php url('doc','uploadBCS');?>',
 
                 'onUploadSuccess' : function(file, data, response) {
-                    
                       data = jQuery.parseJSON(data);
                       if(data.state == 'success')
                       {
@@ -138,7 +144,7 @@
 
                         html += '</a>'
                         html += '</div>'
-                        $("#file_list").append('<input type="hidden" name="files[]" value="'+data.data.id+'" />');
+                        $("#file_list").append(html);
                       } 
               }
             });

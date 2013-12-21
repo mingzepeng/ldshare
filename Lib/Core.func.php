@@ -84,18 +84,24 @@ function U($app=null,$action=null,$param = array(),$enter=null)
     if($action === null) $action = 'index';
 	if (!empty($param))
 		foreach ($param as $key=>$value)  $params[] = $key.'='.$value;
-	if($enter === null) 
+	if($enter === null)
 	{
-		$enter = '';
-		if(defined('ENTER')) $enter = ENTER + '.php';
+		if(defined('ENTER')) 
+			$enter = ENTER;
+		else
+			$enter = '';
 	}
-	else if(isset($enter[0]))
-		$enter .= '.php';
-	$url = $enter.'?c='.$app.'&a='.$action.'&'.implode('&',$params);
+	$url = $enter.'?c='.$app.'&a='.$action;
+	if(!empty($params)) $url .= '&'.implode('&',$params);
 	return $url;
 }
 
-function url($app,$action,$param = array(),$enter='index')
+function url($app,$action,$param = array(),$enter=null)
 {
     echo U($app,$action,$param,$enter);   
+}
+
+function dump()
+{
+
 }

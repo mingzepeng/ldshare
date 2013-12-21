@@ -7,7 +7,7 @@ class docTypeModel extends Model
 	
 	public $fields = array('id','name');
 	
-	public $modelname = 'docTypeModel';
+	public $name = 'docTypeModel';
 	
 	public $autocheck = 1;
 	

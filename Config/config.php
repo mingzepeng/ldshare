@@ -9,7 +9,7 @@ return array(
 
 	'DEFAULT_TIME_ZONE'=>'Asia/Shanghai',
 
-	'HOST'=>'http://localhost/pqframe',
+	'HOST'=>'http://localhost/ldshare',
 
 	'APP_NAME'=>'pqframe',
 

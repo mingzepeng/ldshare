@@ -50,3 +50,12 @@ blockquote, q {
 }
 
 a,img{border-width:0;}
+
+/* links */
+a {
+  color: #009FDA;
+  text-decoration: none;
+}
+a:hover {
+  color: #00BAFF;
+}

@@ -8,7 +8,7 @@
  */
 class Model extends Core
 {
-	public $_name = 'Model';
+	public $name = 'Model';
 	//数据库操作对象
 	public $dbstuff = null;
 
@@ -83,14 +83,15 @@ class Model extends Core
 	
 	public function create($data=array())
 	{
-		$this->data = empty($data) ? $_POST : $data;
+		$data = empty($data) ? $_POST : $data;
+		$this->auto_input_filter && $data = $this->inputFilter($data);
+		$this->autocheck && $this->_validate();
 		if(!empty($this->fields))
 		{
-			foreach ($this->data as $key => $value) 
-				if(!in_array($key, $this->fields)) unset($this->data[$key]);
+			foreach ($data as $key => $value) 
+				if(!in_array($key, $this->fields)) unset($data[$key]);
 		}
-		$this->auto_input_filter && $this->inputFilter();
-		$this->autocheck && $this->_validate();	
+		$this->data = $data;
 		return $this;
 	}
 	
@@ -129,17 +130,14 @@ class Model extends Core
 		    $condition = '('.$this->option['condition'].')';
 		}
 
-		if (isset($this->pk))
+		if (isset($this->pk) && count($pk)>0)
 		{
-			if(count($pk)>0)
-			{
-				$pk = array_unique($pk);
-				foreach ($pk as $key => $value) {
-					$pk[$key] = "'".$value."'";
-				}
-				$pk ='('.implode(',',($pk)).')';
-				$condition2 = "({$this->pk} in {$pk})";				
+			$pk = array_unique($pk);
+			foreach ($pk as $key => $value) {
+				$pk[$key] = "'".$value."'";
 			}
+			$pk ='('.implode(',',($pk)).')';
+			$condition2 = "({$this->pk} in {$pk})";				
 		}
 
 		($condition !== '')  && $where = ' where '.$condition;
@@ -155,7 +153,6 @@ class Model extends Core
 		$limit = (isset($this->option['limit']) && !empty($this->option['limit']) ) ? ' limit '. $this->option['limit'] : '';
 		$sql = "select {$field} from {$table} {$join} {$where} {$order} {$limit}";
 		$result = $this->dbstuff->fetch($sql);
-
 		$this->clear();
 		if ($this->auto_output_filter && $result !== false) 
 		{
@@ -201,7 +198,7 @@ class Model extends Core
 		$sql = "select {$field} from {$table} {$join} {$where} {$order} {$limit}";
 		$result = $this->dbstuff->fetchone($sql);
 		$this->clear();
-		if ($this->auto_output_filter)  $result = $this->outputFilter($result);
+		if ($this->auto_output_filter && $result !== false)  $result = $this->outputFilter($result);
 		return $result;
 	}
 	
@@ -220,17 +217,14 @@ class Model extends Core
 
 		if (isset($this->pk) && isset($pk))
 		{
-		    if(is_array($pk))
+		    if(is_array($pk) && count($pk)>0)
 			{
-				if(count($pk)>0)
-				{
-					$pk = array_unique($pk);
-					foreach ($pk as $key => $value) {
-						$pk[$key] = "'".$value."'";
-					}
-					$pk ='('.implode(',',($pk)).')';
-					$condition2 = "({$this->pk} in {$pk})";					
+				$pk = array_unique($pk);
+				foreach ($pk as $key => $value) {
+					$pk[$key] = "'".$value."'";
 				}
+				$pk ='('.implode(',',($pk)).')';
+				$condition2 = "({$this->pk} in {$pk})";					
 			}
 			else
 			{
@@ -269,18 +263,14 @@ class Model extends Core
 
 		if (isset($this->pk) && isset($pk))
 		{
-		    if(is_array($pk))
+		    if(is_array($pk) && count($pk)>0)
 			{
-				if(count($pk)>0)
-				{
-					$pk = array_unique($pk);
-					foreach ($pk as $key => $value) {
-						$pk[$key] = "'".$value."'";
-					}
-					$pk ='('.implode(',',($pk)).')';
-					$condition2 = "({$this->pk} in {$pk})";					
+				$pk = array_unique($pk);
+				foreach ($pk as $key => $value) {
+					$pk[$key] = "'".$value."'";
 				}
-
+				$pk ='('.implode(',',($pk)).')';
+				$condition2 = "({$this->pk} in {$pk})";					
 			}
 			else
 			{
@@ -316,12 +306,12 @@ class Model extends Core
 		return $result;
 	}
 
-	public function OutInvalid($info)
+	public function outError($info)
 	{
 		Out::ajaxError($info);
 	}
 	
-	public function _validate($data = array(),$callback='OutInvalid',$errorback='error')
+	public function _validate($data = array(),$callback='outError',$method=null,$errorback='error')
 	{
 		if(empty($data)) $data = $this->data;
 	    if(empty($this->validate)) return true;
@@ -391,44 +381,40 @@ class Model extends Core
 	    }
 	}
 	
-	public function inputFilter($errorback='error')
+	protected function inputFilter($data,$errorback='error')
 	{
-	    if (empty($this->input_filter)) return ;
-	    $this->data = $this->_filter($this->data,$this->input_filter,$errorback);
+	    if (empty($this->input_filter)) return $data;
+	    return $this->filter($data,$this->input_filter,$errorback);
 	}
 	
-	public function outputFilter($data = array(),$errorback='error')
+	protected function outputFilter($data,$errorback='error')
 	{
 	    if (empty($this->output_filter)) return $data;
-	    return $this->_filter($data,$this->output_filter,$errorback);
+	    return $this->filter($data,$this->output_filter,$errorback);
 	}
 	
-	public function _filter($data = array(),$rules,$errorback='error')
+	protected function filter($data,$rules,$errorback='error')
 	{
-		
-		foreach ($data as $field=>$value)
+
+		foreach ($rules as $rule) 
 		{
-			foreach ($rules as $rule) 
-			{
-			    if($field !== $rule[0]) continue;
-			    switch ($rule[1])
-			    {
-			    	case "function":
-			    		$fun = $rule[2];
-			    		if(!function_exists($fun)) 
-			    		    $this->$errorback("function:$fun no exist");
-			    		else 
-			    		    $data[$field] = $fun($value);
-			    		break;
-			    	case "callback":
-			    		$method = $rule[2];
-			    		if(!method_exists($this,$method)) 
-			    		    $this->$errorback('object:'.__CLASS__." mehtod:$method no exist");
-			    		else 
-			    		    $data[$field] = $this->$method($value);
-			    		break;
-			    }
-			}
+		    switch ($rule[0])
+		    {
+		    	case "function":
+		    		$fun = $rule[1];
+		    		if(!function_exists($fun)) 
+		    		    $this->$errorback("function:$fun no exist");
+		    		else 
+		    		    $data = $fun($data);
+		    		break;
+		    	case "method":
+		    		$method = $rule[1];
+		    		if(!method_exists($this,$method)) 
+		    		    $this->$errorback('object:'.__CLASS__." mehtod:$method no exist");
+		    		else 
+		    		    $data= $this->$method($data);
+		    		break;
+		    }
 		}
 		return $data;
 	}
