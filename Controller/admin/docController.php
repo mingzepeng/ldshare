@@ -1,9 +1,6 @@
 <?php
 class docController extends Controller
 {
-
-	public $fileTypes = array('doc','docx','txt','pdf','rar','zip');
-
 	public function indexAction()
 	{
 		$m = M("document");
@@ -16,7 +13,8 @@ class docController extends Controller
 		$list = $m->find();
 		$this->assign('list',$list);
 		$this->assign('types',$types);
-		$this->display("doc_list");
+		$this->assignPage('main','doc_list');
+		$this->display();
 	}
 
 	public function addAction()
@@ -26,7 +24,8 @@ class docController extends Controller
 		$type_list = $m->find();
 
 		$this->assign('type_list',$type_list);
-		$this->display("doc_add");
+		$this->assignPage('main','doc_add');
+		$this->display();
 	}
 
 	public function insertAction()
@@ -38,11 +37,13 @@ class docController extends Controller
 		if($result !== false)
 		{
 			$id = $m->getInsertId();
-			$m2 = M('docAttach');
-			$m2->set('document_id',$id)->update($_POST['files']);
+			if(isset($_POST['files']) && !empty($_POST['files']))
+			{
+				$m2 = M('docAttach');
+				$m2->set('document_id',$id)->update(array_map('intval', $_POST['files']) );				
+			}
 			$this->to(null,'index');
 		}
-		
 	}
 
 	public function editAction()
@@ -61,15 +62,24 @@ class docController extends Controller
 		$this->assign('attachs',$list_attach);
 		$this->assign('types',$types);
 		$this->assign('data',$data);
-		$this->display('doc_edit');
+		$this->assignPage('main','doc_edit');
+		$this->display();
 	}
 
 	public function updateAction()
 	{
 		if(!isset($_POST['published'])) $_POST['published'] = 0;
+		$id = (int)$_POST['id'];
 		$m = M('document');
 		$m->create();
-		$m->update((int)$_POST['id']);	
+		$result = $m->update($id);
+		if(false !== $result)
+		{
+			$m2 = M('docAttach');
+			//$m2->delete(array_map('intval', $_POST['files']));
+			if(isset($_POST['files']) && !empty($_POST['files']))
+				$m2->set('document_id',$id)->update(array_map('intval', $_POST['files']));
+		}
 		$this->to(null,'index');
 	}
 
@@ -78,38 +88,5 @@ class docController extends Controller
 		$m = M('document');
 		$m->delete((int)$_GET['id']);
 		$this->to(null,'index');
-	}
-
-	public function uploadBCSAction()
-	{
-		$filename = $_FILES['Filedata']['name'];
-		$tempFile = $_FILES['Filedata']['tmp_name'];
-		$fileParts = pathinfo($_FILES['Filedata']['name']);
-		//echo $fileParts['extension'];
-		if (!in_array($fileParts['extension'],$this->fileTypes))
-			Out::ajaxError("上传文件格式不正确");
-
-		try {
-			import('BCS/BaiduBCS');
-			$baidu_bcs = new BaiduBCS ();
-			$response = $baidu_bcs->create_object('dxshare','/'.START_TIME.$filename,$tempFile,array('filename'=>$filename));
-			if($response->isOK())
-			{
-				$url = $response->header['_info']['url'];
-				$m = M('docAttach');
-				$result = $m->set(array('name'=>$filename,'url'=>$url,'created_at'=>DATETIME))->insert();
-				if(false !== $result)
-					Out::ajaxSuccess('保存成功',array('id'=>$m->getInsertId(),'name'=>$filename,'url'=>$url));
-				else
-					Out::ajaxSuccess('保存失败,请重试',array('id'=>$m->getInsertId(),'error'=>mysql_error()));
-			}
-			else
-				Out::ajaxError("上传失败");			
-		} catch (Exception $e) {
-			Out::ajaxError("上传失败");	
-		}
-
-
-
 	}
 }

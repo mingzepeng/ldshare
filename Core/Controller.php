@@ -17,7 +17,7 @@ class Controller extends Core
 
 	public function assignPage($page=null,$value=null)
 	{
-		if (self::$view instanceof View) self::$view->assignPage($page,$value);
+		if (self::$view instanceof View) self::$view->setPage($page,$value);
 	}
 
 	public function setViewConfig($config=null,$value=null)

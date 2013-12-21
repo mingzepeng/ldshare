@@ -1,49 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>pqframe</title>
-        <?php
-        Page::importCommonCSS('reset,common');
-        Page::import('semantic/css/semantic.min.css');
-        Page::importCSS('style');
-        ?>
-
-    </head>
-
-    <body>
-        <div class="header ui fixed transparent red inverted main menu">
-            <div class="container">
-                <a class="blue item">李丹的小书柜</a>
- 
- <div class="right menu">
-    <a href="#" class="item">注销</a>
-    <a class="item">帮助</a>
-  </div>
-            </div>
-        </div>
-        <div class="main container">
-            <div class="ui grid">
-              <div class="five wide column">
-              <div class="ui vertical red menu">
-
-  <div class="item">
-    <i class="home icon"></i> 主页
-
-  </div>
-  <a class="item">
-    <i class="archive icon"></i> 文档管理
-  </a>
-  <a class="item active">
-    <i class="mail icon"></i> 文档类别管理
-  </a>
-
-</div>
-              </div>
-
-              <div class="eleven wide column">
-               
-              <form class="ui form segment" method="POST" action="<?php url('docType','insert');?>">
+     <form class="ui form segment" method="POST" action="<?php url('docType','insert');?>">
       <div class="field">
         <label>名称</label>
         <div class="ui left labeled icon input">
@@ -61,16 +16,3 @@
 
       <div class="ui blue submit button">保存</div>
     </form>
-
-              </div>
-
-
-            </div>
-        </div>
-    </body>
-</html>
-    <?php
-        Page::importCommonJS('jquery');
-        Page::import('semantic/javascript/semantic.min.js');
-        Page::importJS('main');
-    ?>

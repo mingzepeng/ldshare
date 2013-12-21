@@ -3,7 +3,7 @@ class indexController extends Controller
 {
 	public function indexAction()
 	{
-		//echo "string";
+		$this->assignPage('main','main');
 		$this->display("index");
 	}
 }

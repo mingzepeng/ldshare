@@ -1,49 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>pqframe</title>
-        <?php
-        Page::importCommonCSS('reset,common');
-        Page::import('semantic/css/semantic.min.css');
-        Page::import('uploadify/uploadify.css');
-        Page::importCSS('style');
-        ?>
-
-    </head>
-
-    <body>
-        <div class="header ui fixed transparent red inverted main menu">
-            <div class="container">
-                <a class="blue item">李丹的小书柜</a>
- 
- <div class="right menu">
-    <a href="#" class="item">注销</a>
-    <a class="item">帮助</a>
-  </div>
-            </div>
-        </div>
-        <div class="main container">
-            <div class="ui grid">
-              <div class="five wide column">
-              <div class="ui vertical red menu">
-
-  <div class="item">
-    <i class="home icon"></i> 主页
-
-  </div>
-  <a class="item active">
-    <i class="grid layout icon"></i> 文档管理
-  </a>
-  <a class="item">
-    <i class="mail icon"></i> 文档类别管理
-  </a>
-
-</div>
-              </div>
-
-              <div class="eleven wide column">
-                <form class="ui form segment" action="<?php url('doc','insert');?>" method="POST">
+               <form class="ui form segment" action="<?php url('doc','insert');?>" method="POST">
               
       <div class="field">
         <label>名称</label>
@@ -71,7 +26,7 @@
       </div>
         <div class="field">
     <label>描述</label>
-    <textarea></textarea>
+    <textarea name="description"></textarea>
   </div>
 
   <div class="field">
@@ -105,42 +60,3 @@
 
       <div class="ui blue submit button">保存</div>
     </form>
-
-              </div>
-
-
-            </div>
-        </div>
-    </body>
-</html>
-    <?php
-        Page::importCommonJS('jquery');
-        Page::import('semantic/javascript/semantic.min.js');
-        Page::import('uploadify/jquery.uploadify.min.js');
-        Page::importJS('main');
-    ?>
-    <script type="text/javascript">
- 
-            $("#file").uploadify({
-                'swf': '<?php Page::$config['common_dir'];?>/uploadify/uploadify.swf',
-                'uploader': '<?php url('doc','uploadBCS');?>',
-
-                'onUploadSuccess' : function(file, data, response) {
-                    
-                      data = jQuery.parseJSON(data);
-                      if(data.state == 'success')
-                      {
-                        var html = '<div class="item">';
-                        html += '<input type="hidden" name="files[]" value="'+data.data.id+'" />'
-                        html += '<i class="delete link icon"></i>'
-                        html += '<a class="header" href="'+data.data.url+'">'
-                        html += data.data.name
-
-                        html += '</a>'
-                        html += '</div>'
-                        $("#file_list").append('<input type="hidden" name="files[]" value="'+data.data.id+'" />');
-                      } 
-              }
-            });
- 
-    </script>

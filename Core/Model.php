@@ -467,7 +467,7 @@ class Model extends Core
 		return $this;
 	}
 	
-	public function order($order=array())
+	public function order($order)
 	{
 		if(is_array($order) && !empty($order))
 		    $this->option['order'] = implode(',',$order);

@@ -6,13 +6,14 @@ class docTypeController extends Controller
 		//echo "string";
 		$m = M('docType');
 		$this->assign('data',$m->find());
-		$this->display("doc_type_list");
+		$this->assignPage('main','doc_type_list');
+		$this->display();
 	}
 
 	public function addAction()
 	{
-		//echo "string";
-		$this->display("doc_type_add");
+		$this->assignPage('main','doc_type_add');
+		$this->display();
 	}
 	
 	public function insertAction()
@@ -28,7 +29,8 @@ class docTypeController extends Controller
 		$m = M("docType");
 		$data = $m->findone((int)$_GET['id']);
 		$this->assign('data',$data);
-		$this->display('doc_type_edit');
+		$this->assignPage('main','doc_type_edit');
+		$this->display();
 	}
 
 	public function updateAction()
@@ -36,14 +38,14 @@ class docTypeController extends Controller
 		$m = M('docType');
 		$m->create();
 		$m->update((int)$_POST['id']);	
-		$this->indexAction();
+		$this->to(null,'index');
 	}
 
 	public function deleteAction()
 	{
 		$m = M('docType');
 		$m->delete((int)$_GET['id']);
-		$this->indexAction();
+		$this->to(null,'index');
 	}
 
 

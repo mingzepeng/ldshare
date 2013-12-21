@@ -3,12 +3,13 @@ class indexController extends Controller
 {
 	public function indexAction()
 	{
-		//echo "string";
-		import('BCS/BaiduBCS');
-		$baidu_bcs = new BaiduBCS ();
-		$response = $baidu_bcs->list_object('dxshare');
-		var_dump($response);
-		//var_dump($response->header['_info']['url']);
+		$category = range('A', 'Z');
+		$category[] = '0-9';
+		$m = M("document");
+		$list = $m->order('CONVERT( name USING gbk )')->find();
+		//var_dump(mysql_error());
+		$this->assign('list',$list);
+		$this->assign('category',$category);
 		$this->display("index");
 	}
 }

@@ -6,6 +6,7 @@
         <?php
         Page::importCommonCSS('reset,common');
         Page::import('semantic/css/semantic.min.css');
+        Page::import('uploadify/uploadify.css');
         Page::importCSS('style');
         ?>
 
@@ -14,7 +15,7 @@
     <body>
         <div class="header ui fixed transparent red inverted main menu">
             <div class="container">
-                <a class="blue item">李丹的小书柜</a>
+                <a class="blue item"><?php echo Config::get('APP_NAME');?></a>
  
  <div class="right menu">
     <a href="#" class="item">注销</a>
@@ -24,81 +25,27 @@
         </div>
         <div class="main container">
             <div class="ui grid">
-              <div class="five wide column">
-              <div class="ui vertical red menu">
+              <div class="four wide column">
+              <div class="ui vertical red menu" id="menu">
 
-  <div class="item">
+  <a class="item" href="<?php url('index');?>"  data-value="index">
     <i class="home icon"></i> 主页
 
-  </div>
-  <a class="item active">
-    <i class="grid layout icon"></i> 文档管理
   </a>
-  <a class="item">
+  <a class="item" href="<?php url('doc');?>" data-value="doc">
+    <i class="grid layout icon" ></i> 文档管理
+  </a>
+  <a class="item" href="<?php url('docType');?>" data-value="docType">
     <i class="mail icon"></i> 文档类别管理
   </a>
 
 </div>
               </div>
 
-              <div class="eleven wide column">
-                <div class="ui icon red menu">
-  <a class=" item">
-    <i class="add icon"></i>发布
-  </a>
-  <a class=" item">
-    <i class="delete icon"></i>删除
-  </a>
+              <div class="twelve wide column">
+             
 
-</div>
-
-               <table class="ui table segment ">
-  <thead>
-    <tr><th>名称</th>
-    <th>发布日期</th>
-    <th>状态</th>
-     <th>操作</th>
-  </tr></thead>
-  <tbody>
-    <tr>
-      <td>John</td>
-      <td>Approved</td>
-      <td>None</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <td>Jamie</td>
-      <td>Approved</td>
-      <td>Requires call</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <td>Jill</td>
-      <td>Denied</td>
-      <td>None</td>
-      <td>None</td>
-    </tr>
-  </tbody>
-<!--   <tfoot>
-    <tr><th colspan="4">
-      <div class="ui blue labeled icon button"><i class="add icon"></i> 添加文档</div>
-    </th>
-  </tr></tfoot> -->
-</table>
-<div class="ui borderless red pagination menu">
-  <a class="item">
-    <i class="icon left arrow"></i> Previous
-  </a>
-  <a class="item active">1</a>
-  <a class="item">2</a>
-  <a class="item">3</a>
-  <a class="item">4</a>
-  <a class="item">5</a>
-  <a class="item">6</a>
-  <a class="item">
-    Next <i class="icon right arrow"></i>
-  </a>
-</div>
+                  <?php  include Page::$page["main"];?>
               </div>
 
 
@@ -107,7 +54,29 @@
     </body>
 </html>
     <?php
-        Page::importCommonJS('jquery');
+        Page::importCommonJS('jquery,browser');
         Page::import('semantic/javascript/semantic.min.js');
+        Page::import('uploadify/jquery.uploadify.min.js');
         Page::importJS('main');
     ?>
+            <script type="text/javascript">
+ 
+            $("#file").uploadify({
+                'swf': '<?php echo Page::$config['common_dir'];?>/uploadify/uploadify.swf',
+                'uploader': '<?php url('attach','uploadBCS');?>',
+                'onUploadSuccess' : uploadKit.onUploadSuccess,
+                'fileTypeExts' : '*.doc; *.docx; *.txt; *.pdf; *.rar; *.zip; *.md; *.markdown'
+            });
+      $('#file_list').delegate('i','click',function(){
+                var $item = $(this).closest('div.item');
+                var id = $item.data('value');
+                var url = '<?php url('attach','delete');?>&id=' + id;
+                uploadKit.deleteItem($item,url);    
+        });
+            var params = browser.getUrlParms();
+
+            $("#menu a").each(function(){
+                if($(this).data('value') == params.c) $(this).addClass('active');
+            })
+ 
+    </script>

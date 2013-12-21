@@ -81,7 +81,7 @@ function U($app=null,$action=null,$param = array(),$enter=null)
 {
 	$params = array();
 	if($app === null) $app = Controller;
-    if($action === null) $action = 'index';
+    	if($action === null) $action = 'index';
 	if (!empty($param))
 		foreach ($param as $key=>$value)  $params[] = $key.'='.$value;
 	if($enter === null)
@@ -96,12 +96,7 @@ function U($app=null,$action=null,$param = array(),$enter=null)
 	return $url;
 }
 
-function url($app,$action,$param = array(),$enter=null)
+function url($app=null,$action=null,$param = array(),$enter=null)
 {
     echo U($app,$action,$param,$enter);   
-}
-
-function dump()
-{
-
 }

@@ -12,42 +12,42 @@ class View extends Core
 
 	protected $page = array();
 
-    protected $config = array();              
-   
-    //视图文件夹名称
-    protected $view_dir = '';
+	protected $config = array();              
 
-    //当前模块
-    protected $module = '';
-    
+	//视图文件夹名称
+	protected $view_dir = '';
 
-    //缓存设置  
-    public $cache_dir = '';
-    
-    public $cache_lift_time = 0;
-    
+	//当前模块
+	protected $module = '';
 
-    
-    //默认模板名
-    public $default_template = 'index';
-    
-    public $default_template_type = 'html';
-    
-    //输出方式 put,get
-    public $display_modern = 'put'; 
-           
-    public function __construct($view_dir,$module)
-    {
-        $this->view_dir = $view_dir;
-        if (is_dir(ROOT.SEP.$view_dir))
+
+	//缓存设置  
+	public $cache_dir = '';
+
+	public $cache_lift_time = 0;
+
+
+
+	//默认模板名
+	public $default_template = 'index';
+
+	public $default_template_type = 'html';
+
+	//输出方式 put,get
+	public $display_modern = 'put'; 
+	       
+	public function __construct($view_dir,$module)
+	{
+	    $this->view_dir = $view_dir;
+	    if (is_dir(ROOT.SEP.$view_dir))
 		{
 			$this->setConfig('common_dir', $this->view_dir .'/common');
 			$this->setConfig('common_css_dir', $this->view_dir .'/common/css');
 			$this->setConfig('common_js_dir', $this->view_dir .'/common/js');
 			$this->setConfig('common_image_dir', $this->view_dir .'/common/images');
 		}
-        $this->setModule($module);
-    }
+	    $this->setModule($module);
+	}
     
 	public function assign($var,$value=null)
 	{
@@ -91,27 +91,27 @@ class View extends Core
 	 * @param string $file
 	 * @param string $type = get put
 	 */
-    public function display($template='', $type='put')
-    {   	
-    	if ($type === '') $type = $this->display_modern;
-    	if ($template === '')  $template = $this->default_template;
-    	$template = $this->view_dir.'/'.$this->module.'/'.$template.'.'.$this->default_template_type;
-    	//var_dump($template);
-        if(!is_file($template)) $this->error('template:'.$template.' no exists');
-        
-        import('Page');
-        Page::$config = $this->config;
-        Page::$page = $this->page;
-        Page::$data = $this->data;
-    	extract($this->data);
-    	header("Content-type: text/html; charset=utf-8");
-    	ob_start();
-        include($template);
-        $contents = ob_get_clean();
-		
-    	if ($type === 'put')
-    	{
-    		echo $contents;
+	public function display($template='', $type='put')
+	{   	
+		if ($type === '') $type = $this->display_modern;
+		if ($template === '')  $template = $this->default_template;
+		$template = $this->view_dir.'/'.$this->module.'/'.$template.'.'.$this->default_template_type;
+		//var_dump($template);
+		if(!is_file($template)) $this->error('template:'.$template.' no exists');
+
+		import('Page');
+		Page::$config = $this->config;
+		Page::$page = $this->page;
+		Page::$data = $this->data;
+		extract($this->data);
+		header("Content-type: text/html; charset=utf-8");
+		ob_start();
+		include($template);
+		$contents = ob_get_clean();
+
+		if ($type === 'put')
+		{
+			echo $contents;
 	  		if(Config::get('DEBUG') && !empty(Controller::$log_data))
 			{
 				$log_data = array('log'=>array_map('urlencode_deep',Controller::$log_data));
@@ -122,12 +122,12 @@ class View extends Core
 				include($log_file);
 				//import("log","inc");
 			}
-    		return true;
-    	}
-    	elseif ($type === 'get')
-    	{
-    		return $contents;
-    	}
+			return true;
+		}
+		elseif ($type === 'get')
+		{
+			return $contents;
+		}
 	}
 	
 	public function generateCache($contents='',$cache='',$callback='log')

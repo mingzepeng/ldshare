@@ -1,0 +1,10 @@
+html,body{
+	font-size: 13px;
+}
+
+.header{ width: 100%; height: 40px;}
+.header > .container{ width: 80%; margin: 0 auto; }
+.main.container{width: 80%; margin: 0 auto;  padding-top: 60px;}
+.ui.items > .item{ min-height: 200px;}
+.description{word-wrap:break-word;}
+.footer.ui.horizontal.list{text-align: center; display: block;}

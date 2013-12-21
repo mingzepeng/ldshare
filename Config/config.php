@@ -11,7 +11,7 @@ return array(
 
 	'HOST'=>'http://localhost/ldshare',
 
-	'APP_NAME'=>'pqframe',
+	'APP_NAME'=>'李丹的小书柜',
 
 	//cookie设置
 	'COOKIE_PRE'=>'pq_',

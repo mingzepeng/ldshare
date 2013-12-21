@@ -5,17 +5,78 @@
         <title>pqframe</title>
         <?php
         Page::importCommonCSS('reset,common');
-        Page::importCommonJS('jquery');
-        Page::import('modal');
+        Page::import('semantic/css/semantic.min.css');
+        //Page::import('uploadify/uploadify.css');
+        Page::importCSS('style');
         ?>
 
-    <style type="text/css">
-    p{text-align: center;font-size: 18px;padding-top: 30px;}
-    </style>   
+
     </head>
 
     <body>
-        <p>hello！</p>
-          <p>this is the demo of pqframe</p>
+        <div class="header ui fixed transparent red inverted main menu">
+            <div class="container">
+                <a class="blue item"><?php echo Config::get('APP_NAME');?></a>
+ 
+ <div class="right menu">
+    <a href="#" class="item">登陆</a>
+    <a class="item">帮助</a>
+  </div>
+            </div>
+        </div>
+        <div class="main container">
+            <div class="ui menu">
+                  <a class="item">字母索引</a>
+<?php
+
+    foreach ($category as  $value) {
+        # code...
+  
+?>
+<a class="item"><?php  echo  $value;?></a>
+
+<?php
+  }
+?>
+    
+   
+</div>
+<div class="ui  six items">
+
+<?php
+    foreach ($list as  $data) {
+?>
+    <div class="item">
+      <div class="content">
+        <a  href="#" class="name"><?php  echo  $data['name'];?></a>
+        <p class="description"><?php  echo  $data['description'];?></p>
+      </div>
+    </div>
+ <?php
+  }
+?>
+    
+
+
+</div>
+
+        </div>
+<div class="ui divider"></div>
+<div class="ui divided horizontal footer link list">
+  <div class="item">精弘网络 2013-2014</div>
+<div class="item">
+  技术支持 : <a href="http://mingzepeng.github.io/">茗梓</a>
+  </div>
+  <div class="item">
+    版权所有 : <a href="http://bbs.zjut.com" target="_blank">精弘网络</a>
+  </div>
+
+</div>
     </body>
 </html>
+    <?php
+        Page::importCommonJS('jquery,browser');
+        Page::import('semantic/javascript/semantic.min.js');
+       // Page::import('uploadify/jquery.uploadify.min.js');
+        Page::importJS('main');
+    ?>
