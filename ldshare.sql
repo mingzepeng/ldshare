@@ -1,24 +1,27 @@
-/*
-Navicat MySQL Data Transfer
+-- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: ldshare
+-- ------------------------------------------------------
+-- Server version	5.5.34-0ubuntu0.12.04.1
 
-Source Server         : 5.5
-Source Server Version : 50533
-Source Host           : localhost:3306
-Source Database       : ldshare
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-Target Server Type    : MYSQL
-Target Server Version : 50533
-File Encoding         : 65001
+--
+-- Table structure for table `jh_admins`
+--
 
-Date: 2013-12-21 13:35:34
-*/
-
-SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for `jh_admins`
--- ----------------------------
 DROP TABLE IF EXISTS `jh_admins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jh_admins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login_name` varchar(255) DEFAULT NULL,
@@ -28,15 +31,75 @@ CREATE TABLE `jh_admins` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_name_UNIQUE` (`login_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of jh_admins
--- ----------------------------
+--
+-- Dumping data for table `jh_admins`
+--
 
--- ----------------------------
--- Table structure for `jh_documents`
--- ----------------------------
+LOCK TABLES `jh_admins` WRITE;
+/*!40000 ALTER TABLE `jh_admins` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jh_admins` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `jh_doc_attach`
+--
+
+DROP TABLE IF EXISTS `jh_doc_attach`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jh_doc_attach` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `document_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `jh_doc_attach`
+--
+
+LOCK TABLES `jh_doc_attach` WRITE;
+/*!40000 ALTER TABLE `jh_doc_attach` DISABLE KEYS */;
+INSERT INTO `jh_doc_attach` VALUES (40,'README.md','http://bcs.duapp.com/dxshare/%2F2013%2F12%2F21%2F1387614768README.md?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:5Jcoi79p27SFX0Xecv%2FaJX4J%2FQI%3D','2013-12-21 08:32:48',4),(41,'test.php','http://bcs.duapp.com/dxshare/%2F2013%2F12%2F21%2F1387615160test.php?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:5oLDiadnk6%2Fn%2B0lXQkBubseK2j0%3D','2013-12-21 08:39:20',16);
+/*!40000 ALTER TABLE `jh_doc_attach` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `jh_doc_type`
+--
+
+DROP TABLE IF EXISTS `jh_doc_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jh_doc_type` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `jh_doc_type`
+--
+
+LOCK TABLES `jh_doc_type` WRITE;
+/*!40000 ALTER TABLE `jh_doc_type` DISABLE KEYS */;
+INSERT INTO `jh_doc_type` VALUES (1,'文学'),(3,'小说');
+/*!40000 ALTER TABLE `jh_doc_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `jh_documents`
+--
+
 DROP TABLE IF EXISTS `jh_documents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jh_documents` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -47,60 +110,26 @@ CREATE TABLE `jh_documents` (
   `type_id` int(11) DEFAULT NULL,
   `published` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of jh_documents
--- ----------------------------
-INSERT INTO `jh_documents` VALUES ('4', '中文的', 'http://example.com/iphone/images/test.png ', '2013-12-20 19:34:09', '2013-12-20 19:34:09', null, '3', '1');
-INSERT INTO `jh_documents` VALUES ('5', '豆腐干豆腐干', null, null, null, null, '1', '1');
-INSERT INTO `jh_documents` VALUES ('8', '大三大四', null, '2013-12-20 16:33:03', '2013-12-20 16:33:03', null, '1', '1');
-INSERT INTO `jh_documents` VALUES ('13', '测试文件上传', null, '2013-12-20 21:37:54', '2013-12-20 21:37:54', null, '3', '1');
+--
+-- Dumping data for table `jh_documents`
+--
 
--- ----------------------------
--- Table structure for `jh_doc_attach`
--- ----------------------------
-DROP TABLE IF EXISTS `jh_doc_attach`;
-CREATE TABLE `jh_doc_attach` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `document_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+LOCK TABLES `jh_documents` WRITE;
+/*!40000 ALTER TABLE `jh_documents` DISABLE KEYS */;
+INSERT INTO `jh_documents` VALUES (4,'中文的','http://example.com/iphone/images/test.png ','2013-12-20 11:34:09','2013-12-21 08:39:14',NULL,3,1),(5,'豆腐干豆腐干',NULL,NULL,NULL,NULL,1,1),(8,'大三大四',NULL,'2013-12-20 08:33:03','2013-12-20 08:33:03',NULL,1,1),(16,'文艺的书','是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发士大夫是打发','2013-12-21 07:16:42','2013-12-22 06:24:09',NULL,3,0);
+/*!40000 ALTER TABLE `jh_documents` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
--- ----------------------------
--- Records of jh_doc_attach
--- ----------------------------
-INSERT INTO `jh_doc_attach` VALUES ('1', '使用说明.txt', 'http://bcs.duapp.com/dxshare/%2F1387545681%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:xaqtZ79cyMM2GlQux32TZMaQEBA%3D', '2013-12-20 21:21:21', null);
-INSERT INTO `jh_doc_attach` VALUES ('2', '使用说明.txt', 'http://bcs.duapp.com/dxshare/%2F1387545782%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:rNrNA1k5CrUU2qUJyJAKOFvwzGI%3D', '2013-12-20 21:23:02', null);
-INSERT INTO `jh_doc_attach` VALUES ('3', '使用说明.txt', 'http://bcs.duapp.com/dxshare/%2F1387545833%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:vYZlwga%2FU2GycnQ5Mmr1ZYP%2FOa0%3D', '2013-12-20 21:23:53', null);
-INSERT INTO `jh_doc_attach` VALUES ('4', '使用说明.txt', 'http://bcs.duapp.com/dxshare/%2F1387545865%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:tBH1j4xZvPVPXxySy4bWQ%2BdWPmo%3D', '2013-12-20 21:24:25', null);
-INSERT INTO `jh_doc_attach` VALUES ('5', '使用说明.txt', 'http://bcs.duapp.com/dxshare/%2F1387545915%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:wsyx7LcfuymoZyysPxmSm2gw%2FLo%3D', '2013-12-20 21:25:15', null);
-INSERT INTO `jh_doc_attach` VALUES ('6', 'ZJUT-书柜.doc', 'http://bcs.duapp.com/dxshare/%2F1387546076ZJUT-%E4%B9%A6%E6%9F%9C.doc?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:B4FDmobw4lqRto7fcFxs8aBoq%2Bk%3D', '2013-12-20 21:27:56', null);
-INSERT INTO `jh_doc_attach` VALUES ('7', '使用说明.txt', 'http://bcs.duapp.com/dxshare/%2F1387546133%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:O8O6pLJ9rrPJg5uCGY6IkXkzuOE%3D', '2013-12-20 21:28:53', null);
-INSERT INTO `jh_doc_attach` VALUES ('8', '使用说明.txt', 'http://bcs.duapp.com/dxshare/%2F1387546240%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:4T3iuT4%2BUfWd8n93coI%2BAO3pZAI%3D', '2013-12-20 21:30:40', null);
-INSERT INTO `jh_doc_attach` VALUES ('9', '使用说明.txt', 'http://bcs.duapp.com/dxshare/%2F1387546612%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:WSQPivWAMPwJaJP3t0w%2BUpxPgqk%3D', '2013-12-20 21:36:52', null);
-INSERT INTO `jh_doc_attach` VALUES ('10', '使用说明.txt', 'http://bcs.duapp.com/dxshare/%2F1387546621%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:rlTsSTZ9SvHFHD3T0K2qxmyywYU%3D', '2013-12-20 21:37:01', '13');
-INSERT INTO `jh_doc_attach` VALUES ('11', 'install.txt', 'http://bcs.duapp.com/dxshare/%2F1387546626install.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:KN69xBf4SKfVjq3g0hFcvBEc8YE%3D', '2013-12-20 21:37:06', '13');
-INSERT INTO `jh_doc_attach` VALUES ('12', 'news.txt', 'http://bcs.duapp.com/dxshare/%2F1387548437news.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:jTCizDEa8YBArZ2a4r7znlzKQUk%3D', '2013-12-20 22:07:17', null);
-INSERT INTO `jh_doc_attach` VALUES ('13', 'news.txt', 'http://bcs.duapp.com/dxshare/%2F1387548484news.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:s5oLa6zzkCDYoHiCsqVOTnn1OJk%3D', '2013-12-20 22:08:04', null);
-INSERT INTO `jh_doc_attach` VALUES ('14', 'news.txt', 'http://bcs.duapp.com/dxshare/%2F1387548556news.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:IvsH0kwYVwqJnu50%2BdM91emHfPY%3D', '2013-12-20 22:09:16', null);
-INSERT INTO `jh_doc_attach` VALUES ('15', 'license.txt', 'http://bcs.duapp.com/dxshare/%2F1387548589license.txt?sign=MBO:3C6wefc3LtpFadgfRHn6dfMw:613ZfEsbLj46ZgkASgSpD4nhGO4%3D', '2013-12-20 22:09:49', null);
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- ----------------------------
--- Table structure for `jh_doc_type`
--- ----------------------------
-DROP TABLE IF EXISTS `jh_doc_type`;
-CREATE TABLE `jh_doc_type` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of jh_doc_type
--- ----------------------------
-INSERT INTO `jh_doc_type` VALUES ('1', '文学');
-INSERT INTO `jh_doc_type` VALUES ('3', '小说');
+-- Dump completed on 2013-12-22 16:29:55

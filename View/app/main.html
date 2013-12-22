@@ -1,0 +1,20 @@
+<div class="ui six items" id="top_list">
+
+<?php
+    foreach ($list as  $data) {
+?>
+    <div class="item">
+      <div class="content">
+        <a  href="<?php url('doc','detail',array('id'=>$data['id']));?>" class="name"><?php  echo  $data['name'];?></a>
+       
+        <p class="description"><?php  echo  $data['created_at'];?></p>
+         <p class="description"><?php  echo  $data['description'];?></p>
+      </div>
+    </div>
+ <?php
+  }
+?>
+    
+
+
+</div>

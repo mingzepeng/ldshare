@@ -1,8 +1,8 @@
 <?php
-class indexController extends Controller
+class attachController extends Controller
 {
 	public function indexAction()
 	{
-		
+
 	}
 }

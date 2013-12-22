@@ -103,10 +103,13 @@ class View extends Core
 		Page::$config = $this->config;
 		Page::$page = $this->page;
 		Page::$data = $this->data;
-		extract($this->data);
-		header("Content-type: text/html; charset=utf-8");
 		ob_start();
-		include($template);
+		header("Content-type: text/html; charset=utf-8");
+		$this->displayHtml($this->data,$template);
+		// extract($this->data);
+		
+		
+		// include($template);
 		$contents = ob_get_clean();
 
 		if ($type === 'put')
@@ -128,6 +131,12 @@ class View extends Core
 		{
 			return $contents;
 		}
+	}
+
+	private function displayHtml($params,$template)
+	{
+		extract($this->data);
+		include $template;
 	}
 	
 	public function generateCache($contents='',$cache='',$callback='log')

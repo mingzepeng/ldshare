@@ -1,0 +1,54 @@
+
+<div class="ui grid" id="doc_detail">
+
+<div class="twelve wide column">
+	<div class="ui raised segment">
+            <div class="ui blue ribbon label">名称</div>
+            <p><?php echo $doc['name'];?></p>
+            <div class="ui green ribbon label">类型</div>
+            <p><?php echo $type_name;?></p>
+
+
+
+<?php if(!empty($attachs)){?>
+<div class="ui teal ribbon label">下载</div>
+    <div class="ui list segment" id="file_list">
+      <?php foreach ($attachs as $key => $value) { ?>
+      <div class="item" data-value="<?php echo $value['id'];?>">
+        
+        <i class="cloud download icon"></i>
+        <a class="header" href="<?php echo $value['url'];?>">
+          
+          <?php echo $value['name'];?>
+        </a>
+      </div>
+      <?php } ?>
+    </div>
+ <?php } ?>
+
+            <div class="ui red ribbon label">描述</div>
+            <p class="created_at">发布日期：<?php echo $doc['created_at'];?></p>
+            <p class="updated_at">更新日期：<?php echo $doc['updated_at'];?></p>
+            <p class="description"><?php echo $doc['description'];?></p>
+          </div>
+ <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"mingzepeng"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</div>
+ 	<div class="four wide column">
+
+	</div> 
+</div>
+

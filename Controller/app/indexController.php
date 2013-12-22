@@ -6,10 +6,19 @@ class indexController extends Controller
 		$category = range('A', 'Z');
 		$category[] = '0-9';
 		$m = M("document");
-		$list = $m->order('CONVERT( name USING gbk )')->find();
-		//var_dump(mysql_error());
+
+		$m->order('created_at desc');
+		if(isset($_GET['type_id']) && !empty($_GET['type_id']))
+		{			
+			$type_id = (int)$_GET['type_id'];
+			$this->assign('type_id',$type_id);
+			$m->where("type_id='{$type_id}'");
+		} 
+		$list = $m->find();
+
 		$this->assign('list',$list);
 		$this->assign('category',$category);
+		$this->assignPage("content","main");
 		$this->display("index");
 	}
 }

@@ -81,6 +81,11 @@ class Model extends Core
 	    return $this;
 	}
 	
+	public function getTable()
+	{
+	    return $this->table_full_name;
+	}
+
 	public function create($data=array())
 	{
 		$data = empty($data) ? $_POST : $data;

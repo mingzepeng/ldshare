@@ -80,8 +80,8 @@ function M($model=null,$type=null)
 function U($app=null,$action=null,$param = array(),$enter=null)
 {
 	$params = array();
-	if($app === null) $app = Controller;
-    	if($action === null) $action = 'index';
+	if($app === null) $app = 'index';
+    if($action === null) $action = 'index';
 	if (!empty($param))
 		foreach ($param as $key=>$value)  $params[] = $key.'='.$value;
 	if($enter === null)
