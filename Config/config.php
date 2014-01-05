@@ -9,9 +9,10 @@ return array(
 
 	'DEFAULT_TIME_ZONE'=>'Asia/Shanghai',
 
-	'HOST'=>'http://localhost/ldshare',
+	'HOST'=>'http://210.32.200.89:11014/ldshare',
 
-	'APP_NAME'=>'丹特莉安的书架',
+	'APP_NAME'=>'书架晒晒月光',
+
 
 	//cookie设置
 	'COOKIE_PRE'=>'pq_',
@@ -44,7 +45,7 @@ return array(
 
 			'user'=>'root',
 
-			'password'=>'123456',
+			'password'=>'myzjut',
 
 			'charset'=>'utf8',
 

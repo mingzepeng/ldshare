@@ -5,7 +5,7 @@ class documentModel extends Model
 	
 	public $pk = 'id';
 	
-	public $fields = array('id','name','description','created_at','updated_at','author_id','type_id','published');
+	public $fields = array('id','name','author','description','created_at','updated_at','author_id','type_id','published');
 	
 	public $name = 'documentModel';
 	
