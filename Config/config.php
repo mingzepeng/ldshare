@@ -9,7 +9,7 @@ return array(
 
 	'DEFAULT_TIME_ZONE'=>'Asia/Shanghai',
 
-	'HOST'=>'http://210.32.200.89:11014/ldshare',
+	'HOST'=>'http://localhost/ldshare',
 
 	'APP_NAME'=>'书架晒晒月光',
 
@@ -45,7 +45,7 @@ return array(
 
 			'user'=>'root',
 
-			'password'=>'myzjut',
+			'password'=>'',
 
 			'charset'=>'utf8',
 
